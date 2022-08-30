@@ -14,6 +14,10 @@ typedef struct devinfo {
 	unsigned long global_mem_size;
 	unsigned int max_clock_freq;
 	unsigned int compute_units;
+	unsigned int max_constant_args;
+	unsigned long max_constant_buffer_size;
+	unsigned long max_mem_alloc_size;
+	size_t max_parameter_size;
 	char *device_extensions;
 	char *opencl_version;
 	char *device_name;
@@ -83,6 +87,14 @@ int main(int argc, char *argv[]) {
 			
 			ret |= clGetDeviceInfo(device_ids[j], CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(unsigned int), &platinfo[i].devinfo[j].compute_units, NULL);
 			
+			ret |= clGetDeviceInfo(device_ids[j], CL_DEVICE_MAX_CONSTANT_ARGS, sizeof(unsigned int), &platinfo[i].devinfo[j].max_constant_args, NULL);
+			
+			ret |= clGetDeviceInfo(device_ids[j], CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE, sizeof(unsigned long), &platinfo[i].devinfo[j].max_constant_buffer_size, NULL);
+			
+			ret |= clGetDeviceInfo(device_ids[j], CL_DEVICE_MAX_MEM_ALLOC_SIZE, sizeof(unsigned long), &platinfo[i].devinfo[j].max_mem_alloc_size, NULL);
+			
+			ret |= clGetDeviceInfo(device_ids[j], CL_DEVICE_MAX_PARAMETER_SIZE, sizeof(size_t), &platinfo[i].devinfo[j].max_parameter_size, NULL);
+			
 			ret |= clGetDeviceInfo(device_ids[j], CL_DEVICE_NAME, 0, NULL, &size);
 			platinfo[i].devinfo[j].device_name = (char *) malloc(sizeof(char) * size);
 			ret |= clGetDeviceInfo(device_ids[j], CL_DEVICE_NAME, size, platinfo[i].devinfo[j].device_name, NULL);
@@ -122,6 +134,11 @@ int main(int argc, char *argv[]) {
 			printf("    Global device memory size: %ld bytes\n", platinfo[i].devinfo[j].global_mem_size);
 			printf("    Maximum configured clock frequency: %d MHz\n", platinfo[i].devinfo[j].max_clock_freq);
 			printf("    Compute cores: %d\n", platinfo[i].devinfo[j].compute_units);
+			
+			printf("    Max number of constant arguments: %d\n", platinfo[i].devinfo[j].max_constant_args);
+			printf("    Max constant buffer allocation: %ld bytes\n", platinfo[i].devinfo[j].max_constant_buffer_size);
+			printf("    Max object memory allocation: %ld bytes\n", platinfo[i].devinfo[j].max_mem_alloc_size);
+			printf("    Max argument size: %ld bytes\n", platinfo[i].devinfo[j].max_parameter_size);
 			
 			printf("    Supported extensions: %s\n", platinfo[i].devinfo[j].device_extensions);
 			printf("\n");
