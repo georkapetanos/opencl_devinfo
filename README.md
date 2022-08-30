@@ -1,0 +1,1 @@
+## OpenCL device capabilities parser.
