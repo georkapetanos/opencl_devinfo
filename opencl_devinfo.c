@@ -62,6 +62,9 @@ int main(int argc, char *argv[]) {
 		}
 		printf("  %d device(s) available.\n", ret_num_devices);
 		platinfo[i].devinfo = (devinfoT *) malloc(sizeof(devinfoT) * ret_num_devices);
+		if(device_ids != NULL) {
+			free(device_ids);
+		}
 		device_ids = (cl_device_id *) malloc(sizeof(cl_device_id) * ret_num_devices);
 		ret = clGetDeviceIDs(platform_ids[i], CL_DEVICE_TYPE_DEFAULT, 1, device_ids, &ret_num_devices);
 		if (ret != CL_SUCCESS) {
@@ -153,7 +156,11 @@ int main(int argc, char *argv[]) {
 			free(platinfo[i].devinfo[j].driver_version);
 			free(platinfo[i].devinfo[j].device_extensions);
 		}
+		free(platinfo[i].devinfo);
 	}
+	free(platinfo);
+	free(platform_ids);
+	free(device_ids);
 	
 	error:
 	
